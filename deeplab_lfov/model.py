@@ -112,7 +112,7 @@ class DeepLabLFOVModel(object):
         v_idx = 0 # Index variable.
         
         # Last block is the classification layer.
-        for b_idx in xrange(len(dilations) - 1):
+        for b_idx in range(len(dilations) - 1):
             for l_idx, dilation in enumerate(dilations[b_idx]):
                 w = self.variables[v_idx * 2]
                 b = self.variables[v_idx * 2 + 1]
@@ -199,11 +199,11 @@ class DeepLabLFOVModel(object):
         prediction = tf.reshape(raw_output, [-1, n_classes])
         
         # Need to resize labels and convert using one-hot encoding.
-        label_batch = self.prepare_label(label_batch, tf.pack(raw_output.get_shape()[1:3]))
+        label_batch = self.prepare_label(label_batch, tf.stack(raw_output.get_shape()[1:3]))
         gt = tf.reshape(label_batch, [-1, n_classes])
         
         # Pixel-wise softmax loss.
-        loss = tf.nn.softmax_cross_entropy_with_logits(prediction, gt)
+        loss = tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=gt)
         reduced_loss = tf.reduce_mean(loss)
         
         return reduced_loss
