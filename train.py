@@ -122,6 +122,8 @@ def main():
     optimiser = tf.train.AdamOptimizer(learning_rate=args.learning_rate)
     trainable = tf.trainable_variables()
     optim = optimiser.minimize(loss, var_list=trainable)
+
+    tf.summary.scalar("lfov_loss",loss)
     
     pred = net.preds(image_batch)
     
@@ -143,7 +145,10 @@ def main():
     
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
-   
+
+    summary_merged = tf.summary.merge_all()
+    summary_writer = tf.summary.FileWriter(args.snapshot_dir,graph=tf.get_default_graph())
+
     # Iterate over training steps.
     for step in range(args.num_steps):
         start_time = time.time()
@@ -164,7 +169,8 @@ def main():
             plt.close(fig)
             save(saver, sess, args.snapshot_dir, step)
         else:
-            loss_value, _ = sess.run([loss, optim])
+            loss_value, summary , _ = sess.run([loss,summary_merged, optim])
+            summary_writer.add_summary(summary,step)
         duration = time.time() - start_time
         print('step {:d} \t loss = {:.3f}, ({:.3f} sec/step)'.format(step, loss_value, duration))
     coord.request_stop()
