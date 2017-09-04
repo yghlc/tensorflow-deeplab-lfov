@@ -2,5 +2,7 @@
 
 .idea/
 images/
-
+snapshots/
+*.pyc
+__pycache__/
 
