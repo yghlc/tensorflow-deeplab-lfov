@@ -8,7 +8,7 @@ train_script=${HOME}/codes/PycharmProjects/tensorflow-deeplab-lfov/train.py
 dataDir=/home/hlc/Data/VOCdevkit/VOC2012
 #data_list=/home/hlc/Data/aws_SpaceNet/un_gz/voc_format/AOI_2_Vegas_Train/trainval_aug_path.txt
 #num_classes=2
-batchSize=15
+batchSize=16
 
 pre_train_model=${HOME}/Data/deeplab/pre-train/tensorflow-deeplab-lfov/model.ckpt-init
 #pre_train_model=./snapshots/model.ckpt-3000.data-00000-of-00001
